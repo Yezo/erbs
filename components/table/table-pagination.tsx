@@ -10,17 +10,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
+import { IMinMax } from "@/types/searchParams"
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
-  searchParams: Props["searchParams"]
-}
-
-type Props = {
-  searchParams: {
-    min: string | undefined
-    max: string | undefined
-  }
+  searchParams: IMinMax
 }
 
 export function DataTablePagination<TData>({

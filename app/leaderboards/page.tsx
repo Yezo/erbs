@@ -10,19 +10,9 @@ import {
   getRankedSquadLeaderboardStats,
   getUserDataByUserID,
 } from "@/lib/fetch"
+import { IMinMax } from "@/types/searchParams"
 
-type Props = {
-  searchParams: {
-    min: string | undefined
-    max: string | undefined
-  }
-}
-
-export default async function LeaderboardsPage({
-  searchParams,
-}: {
-  searchParams: Props["searchParams"]
-}) {
+export default async function LeaderboardsPage({ searchParams }: { searchParams: IMinMax }) {
   const seasonID = "19"
   const userID = "3074703"
   const next = "26715422"

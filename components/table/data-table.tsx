@@ -17,14 +17,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { DataTablePagination } from "@/components/table/table-pagination"
+import { IMinMax } from "@/types/searchParams"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  searchParams: {
-    min: string | undefined
-    max: string | undefined
-  }
+  searchParams: IMinMax
 }
 
 export function DataTable<TData, TValue>({
