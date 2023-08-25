@@ -15,8 +15,8 @@ export const columns: ColumnDef<IUserStat>[] = [
     accessorKey: "rank",
     header: () => <div className="text-center font-bold">Rank</div>,
     cell: ({ row }) => {
-      const index = row.index
-      return <div className="text-center text-xs font-semibold">{index + 1}</div>
+      const index = row.original.ranking
+      return <div className="text-center text-xs font-semibold">{index}</div>
     },
   },
   {

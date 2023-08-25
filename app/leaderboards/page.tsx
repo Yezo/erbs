@@ -31,24 +31,55 @@ export default async function LeaderboardsPage({ searchParams }: { searchParams:
   const min = searchParams.min ?? 0
   const max = searchParams.max ?? 10
 
-  const listOfLeaderboardIDs = DataLeaderboard.slice(Number(min), Number(max)).map(({ userNum }) =>
-    userNum.toString()
-  )
-  const promises = listOfLeaderboardIDs.map((item) => getUserDataByUserID(item, seasonID))
-  const unsortedUsers = await Promise.all(promises)
-  const sortedUsers = unsortedUsers
-    .map((item) => item.userStats)
-    .flat()
-    .sort((a, b) => {
-      return b.mmr - a.mmr
-    })
+  // const listOfLeaderboardIDs = DataLeaderboard.slice(Number(min), Number(max)).map(({ userNum }) =>
+  //   userNum.toString()
+  // )
+  // const promises = listOfLeaderboardIDs.map((item) => getUserDataByUserID(item, seasonID))
+  // const unsortedUsers = await Promise.all(promises)
+  // const sortedUsers = unsortedUsers
+  //   .map((item) => item.userStats)
+  //   .flat()
+  //   .sort((a, b) => {
+  //     return b.mmr - a.mmr
+  //   })
+  //Sort 1000 players by MMR before-hand
+  const sorted = DataLeaderboard.sort((a, b) => b.mmr - a.mmr)
 
-  // http://localhost:3000/leaderboards?min=200&max=250
-  //! TRY USING PARAMS AS STATE TO CONTROL THE SLICE??? https://github.com/Yezo/shadcn-playground/blob/main/app/table/components/DataTableCategorySelect.tsx
+  //Slice data by params
+  const slice = sorted.slice(Number(min), Number(max))
+
+  //Get all the ranks and IDs from sliced data
+  const nums = slice.map(({ rank }) => rank)
+  const ids = slice.map(({ userNum }) => userNum.toString())
+
+  //Fetch data by ID
+  const promises = ids.map((item) => getUserDataByUserID(item, seasonID))
+  const unsortedUsers = await Promise.all(promises)
+  const users = unsortedUsers.map((item) => item.userStats).flat()
+  const final = users.map((item, index) => ({ ...item, ranking: nums[index] }))
+
+  // const transformData = async () => {
+  //   //Sort 1000 players by MMR before-hand
+  //   const sorted = DataLeaderboard.sort((a, b) => b.mmr - a.mmr)
+
+  //   //Slice data by params
+  //   const slice = sorted.slice(Number(min), Number(max))
+
+  //   //Get all the ranks and IDs from sliced data
+  //   const nums = slice.map(({ rank }) => rank)
+  //   const ids = slice.map(({ userNum }) => userNum.toString())
+
+  //   //Fetch data by ID
+  //   const promises = ids.map((item) => getUserDataByUserID(item, seasonID))
+  //   const unsortedUsers = await Promise.all(promises)
+  //   const users = unsortedUsers.map((item) => item.userStats).flat()
+  //   // const final = users.map((item, index) => ({ ...item, ranking: nums[index] }))
+  //   // const sliced = final.slice(Number(min), Number(max))
+  //   return users
+  // }
 
   return (
     <Main>
-      {`hi there: ${searchParams.max}`}
       {/* <Dummy data={UsernameData} />
       <Dummy data={UserDataByUserID} />
       <Dummy data={UserMatchHistory} /> */}
@@ -57,9 +88,10 @@ export default async function LeaderboardsPage({ searchParams }: { searchParams:
       {/* <Dummy data={rankedData} />
       <Dummy data={userData} /> */}
       {/* <Dummy data={sortedUsers} /> */}
-      <Wrapper data={DataLeaderboard} />
+      <Dummy data={final} />
+      {/* <Wrapper data={DataLeaderboard} /> */}
 
-      <DataTable columns={columns} data={sortedUsers} searchParams={searchParams} />
+      <DataTable columns={columns} data={final} searchParams={searchParams} />
     </Main>
   )
 }

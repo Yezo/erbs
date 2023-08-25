@@ -37,6 +37,7 @@ export async function getUserDataByUserID(
   const data = await fetch(`${process.env.BASE_API_URL}/user/stats/${ID}/${SEASON_ID}`, {
     method: "GET",
     headers: { "x-api-key": `${process.env.API_KEY}` },
+    next: { revalidate: 1800 },
   })
 
   if (!data.ok) throw new Error("Failed to fetch data")
@@ -88,6 +89,7 @@ export async function getRankedSquadLeaderboardStats(
   const data = await fetch(`${process.env.BASE_API_URL}/rank/top/${seasonID}/3?per_page=5'`, {
     method: "GET",
     headers: { "x-api-key": `${process.env.API_KEY}` },
+    next: { revalidate: 1800 },
   })
 
   if (!data.ok) throw new Error("Failed to fetch data")

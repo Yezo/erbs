@@ -29,6 +29,7 @@ export interface IUserStat {
   top5: number
   top7: number
   characterStats: ICharacterStat[]
+  ranking?: number
 }
 
 export interface ICharacterStat {
